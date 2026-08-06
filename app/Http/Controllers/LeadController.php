@@ -2,25 +2,32 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreLeadRequest;
+use App\Http\Requests\UpdateLeadRequest;
 use App\Models\Lead;
+use App\Models\User;
+use App\Services\LeadService;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\Request;
 
 class LeadController extends Controller
 {
     use AuthorizesRequests;
+    public function __construct(
+    private LeadService $leadService
+    ) {}
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-            if (auth()->user()->role === 'admin') {
-                 $leads = Lead::latest()->paginate(10);
-            } else {
-                $leads = Lead::where('assigned_to', auth()->id())
-                            ->latest()
-                            ->paginate(10);
-            }
+            $query = Lead::with('assignedUser');
+
+        if  (auth()->user()->role !== 'admin') {
+            $query->where('assigned_to', auth()->id());
+        }
+
+        $leads = $query->latest()->paginate(10);
 
         return view('leads.index', compact('leads'));
     }
@@ -30,15 +37,21 @@ class LeadController extends Controller
      */
     public function create()
     {
-        //
+        $users = User::where('role', 'member')->get();
+
+        return view('leads.create', compact('users'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreLeadRequest  $request)
     {
-        //
+        $this->leadService->create($request->validated());
+
+        return redirect()
+            ->route('leads.index')
+            ->with('success', 'Lead created successfully.');
     }
 
     /**
@@ -56,15 +69,26 @@ class LeadController extends Controller
     {
         $this->authorize('update', $lead);
 
-        return view('leads.edit', compact('lead'));
+    $users = User::where('role', 'member')->get();
+
+    return view('leads.edit', compact('lead', 'users'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateLeadRequest  $request, string $id)
     {
-        //
+        $this->authorize('update', $lead);
+
+        $this->leadService->update(
+            $lead,
+            $request->validated()
+        );
+    
+        return redirect()
+            ->route('leads.index')
+            ->with('success', 'Lead updated successfully.');
     }
 
     /**
@@ -76,6 +100,6 @@ class LeadController extends Controller
 
         $lead->delete();
     
-        return redirect()->route('leads.index');
+        return back()->with('success', 'Lead deleted.');
     }
 }
