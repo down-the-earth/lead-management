@@ -46,4 +46,25 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function assignedLeads()
+{
+    return $this->hasMany(Lead::class,'assigned_to');
+}
+
+public function createdLeads()
+{
+    return $this->hasMany(Lead::class,'created_by');
+}
+
+public function leadNotes()
+{
+    return $this->hasMany(LeadNote::class);
+}
+
+public function leadActivities()
+{
+    return $this->hasMany(LeadActivity::class);
+}
+
 }
