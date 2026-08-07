@@ -47,11 +47,18 @@ class LeadController extends Controller
      */
     public function store(StoreLeadRequest  $request)
     {
-        $this->leadService->create($request->validated());
+        try{
+            $this->leadService->create($request->validated());
 
-        return redirect()
-            ->route('leads.index')
-            ->with('success', 'Lead created successfully.');
+            return redirect()
+                ->route('leads.index')
+                ->with('success', 'Lead created successfully.');
+
+        }catch(\Exception $e){
+            return back()->with('error',$e->getMessage());
+
+        }
+       
     }
 
     /**
@@ -77,7 +84,7 @@ class LeadController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateLeadRequest  $request, string $id)
+    public function update(UpdateLeadRequest  $request, Lead $lead)
     {
         $this->authorize('update', $lead);
 

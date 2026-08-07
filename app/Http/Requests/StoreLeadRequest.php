@@ -23,7 +23,7 @@ class StoreLeadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
+            
             'email' => 'required|email',
             'phone' => 'nullable|string|max:20',
             'company' => 'nullable|string|max:255',

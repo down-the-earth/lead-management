@@ -3,9 +3,14 @@
 
 @section('content')
 <div>
+    @if(session('error'))
+        <div class="alert-danger">
+            {{$error}}
+        </div>
+    @endif
     <form action="{{ route('leads.update',$lead) }}" method="POST">
         @method('PUT')
-        @include('leads._partials.form')
+        @include('leads._partials.form',['lead'=>$lead])
 
         <button type="submit" class="btn btn-primary">Update</button>
     </from>

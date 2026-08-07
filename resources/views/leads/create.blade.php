@@ -3,7 +3,7 @@
 
 @section('content')
 <div>
-    <form action="{{ route('leads.create') }}" method="POST">
+    <form action="{{ route('leads.store') }}" method="POST">
         @include('leads._partials.form')
         <button type="submit" class="btn btn-primary">Save</button>
     </from>
