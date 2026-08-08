@@ -2,17 +2,16 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeadController;
+use App\Http\Controllers\LeadNoteController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicLeadController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('dashboard');
-
+Route::get('/', [PublicLeadController::class, 'create'])->name('home');
+Route::post('/lead-submit', [PublicLeadController::class, 'store'])
+    ->name('lead.submit');
+Route::post('/leads/{lead}/notes',[LeadNoteController::class,'store'])->name('notes.store');
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -5,12 +5,14 @@
         Dashboard
     </a>
 
-    <a href="#" class="list-group-item">
+    <a href="{{ route('leads.index') }}" class="list-group-item">
         Leads
     </a>
 
+        @can('view',auth()->user()->role)
     <a href="#" class="list-group-item">
         Users
     </a>
+    @endcan
 
 </div>

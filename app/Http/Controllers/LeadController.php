@@ -64,9 +64,17 @@ class LeadController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Lead $lead)
     {
-        //
+        $this->authorize('view', $lead);
+
+        $lead->load([
+            'assignedUser',
+            'notes.user',
+            'activities.user',
+        ]);
+
+return view('leads.show', compact('lead'));
     }
 
     /**
