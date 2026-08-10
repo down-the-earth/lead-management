@@ -1,7 +1,7 @@
 
 <div class="list-group">
 
-    <a href="#" class="list-group-item">
+    <a href="{{ route('dashboard') }}" class="list-group-item">
         Dashboard
     </a>
 
