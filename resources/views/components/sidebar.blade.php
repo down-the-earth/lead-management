@@ -9,7 +9,7 @@
         Leads
     </a>
 
-        @can('view',auth()->user()->role)
+        @can('viewAny',\App\Models\User::class)
     <a href="#" class="list-group-item">
         Users
     </a>

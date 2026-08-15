@@ -251,3 +251,10 @@
 </div>
 
 @endsection
+<!-- @section('scripts') -->
+<!-- <script>
+    window.Echo.private(`App.Models.User.{{ auth()->id() }}`).notification((notification) =>{
+        console.log('New notification:', notification);
+        alert(notification.message);
+    });
+    </script> -->

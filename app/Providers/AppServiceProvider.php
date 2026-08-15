@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Events\LeadAssigned;
+use App\Listeners\SendLeadAssignedAlert;
 use App\Models\Lead;
 use App\Observers\LeadObserver;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,5 +25,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Lead::observe(LeadObserver::class);
+        Event::listen(LeadAssigned::class,SendLeadAssignedAlert::class);
     }
 }

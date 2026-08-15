@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\LeadAssigned;
 use App\Models\Lead;
 
 class LeadService
@@ -14,8 +15,14 @@ class LeadService
 
           public function update(Lead $lead,array $data):Lead
           {
+                    $oldAssignedUser = $lead->assigned_to;
                     $lead->update($data);
-                    return $lead;
+
+                    if(isset($data['assigned_to']) && $oldAssignedUser != $lead->assigned_to && $lead->assigned_to)
+                              {
+                                        LeadAssigned::dispatch($lead->fresh(),$lead->assigned_to);
+                              }
+                    return $lead->fresh();
 
           }
 
